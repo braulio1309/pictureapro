@@ -1,0 +1,75 @@
+.fc .fc-button {
+    @apply btn btn-sm btn-ghost capitalize rounded-3xl
+}
+
+/* .fc .fc-button-primary:disabled {
+    @apply btn btn-sm btn-primary capitalize
+} */
+
+.fc-theme-standard td {
+    @apply border-gray-200
+} 
+
+.fc-day-other {
+    /* background: #FAFAFB; */
+    @apply bg-gray-100
+}
+
+.fc .fc-button .fc-icon {
+    font-size: 0.875rem !important;
+}
+
+a.fc-col-header-cell-cushion {
+    @apply uppercase leading-8
+}
+
+.fc .fc-daygrid-day-top {
+    @apply justify-center text-gray-400 font-medium
+}
+
+.fc .fc-day-today {
+    @apply !bg-white
+}
+
+.fc .fc-day-today .fc-daygrid-day-top {
+    /* @apply  */
+}
+
+.fc .fc-day-today .fc-daygrid-day-top a {
+    @apply w-8 h-8 bg-primary text-center rounded-full text-white
+}
+
+.fc-highlight {
+    @apply !bg-accent/20
+}
+
+a.fc-event {
+    @apply p-3 !bg-white !rounded-3xl !my-1.5 !shadow-md flex justify-center font-medium border-0
+}
+
+/**
+* Booking statuses
+*/
+a.fc-event.pending {
+    @apply !bg-accent text-white
+}
+a.fc-event.confirmed {
+    @apply !bg-primary text-white
+}
+
+.fc-event-main {
+    @apply !flex !items-center !text-black
+}
+
+a.fc-event:hover {
+    @apply bg-accent/30 cursor-pointer
+}
+
+.fc-daygrid-day-frame {
+    @apply !p-2
+}
+
+/* header */
+.fc-toolbar-title {
+    /* @apply first-capital */
+}
