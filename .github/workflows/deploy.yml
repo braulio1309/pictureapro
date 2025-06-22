@@ -1,0 +1,57 @@
+name: Deploy Laravel to AWS
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  AWS_EC2_INSTANCE_IP: ${{ secrets.AWS_EC2_INSTANCE_IP }}
+  AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+  AWS_EC2_USER: ubuntu
+  APP_ENV: production
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_DATABASE: ${{ secrets.DB_DATABASE }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        composer install --no-dev --prefer-dist --optimize-autoloader
+        npm install
+        npm run production
+
+    - name: Upload files to EC2 via SSH
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ env.AWS_EC2_INSTANCE_IP }}
+        username: ${{ env.AWS_EC2_USER }}
+        key: ${{ env.AWS_SSH_KEY }}
+        source: "./"
+        target: "/var/www/laravel-app"
+        strip_components: 1
+
+    - name: Run deployment commands on EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.AWS_EC2_INSTANCE_IP }}
+        username: ${{ env.AWS_EC2_USER }}
+        key: ${{ env.AWS_SSH_KEY }}
+        script: |
+          cd /var/www/laravel-app
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          php artisan migrate --force
+          sudo chown -R www-data:www-data /var/www/laravel-app/storage
+          sudo chown -R www-data:www-data /var/www/laravel-app/bootstrap/cache
+          sudo chmod -R 775 /var/www/laravel-app/storage
+          sudo chmod -R 775 /var/www/laravel-app/bootstrap/cache
+          sudo systemctl restart apache2
