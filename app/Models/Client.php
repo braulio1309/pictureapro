@@ -27,6 +27,8 @@ class Client extends Model
         'city_name',
         'notes',
         'tenant_id',
+        'allow_publish_images',
+        'allow_commercial_comms'
     ];
 
     protected $appends = ['fullname'];

@@ -43,6 +43,10 @@ class ShowPage extends Component
             ['label' => 'Provincia', 'value' => $this->client->province_name ?? 'Sin definir'],
             ['label' => 'País', 'value' => $this->client->country_name ?? 'Sin definir'],
             ['label' => 'Código Postal', 'value' => $this->client->postal_code ?? 'Sin definir'],
+            ['label' => 'El cliente permite publicar sus imágenes', 'value' => ($this->client->allow_publish_images)?'Si permite': 'No Permite'],
+            ['label' => 'El cliente permite comunicaciones comerciales', 'value' => ($this->client->allow_commercial_comms)?'Si permite': 'No Permite'],
+
+
         ];
     }
 

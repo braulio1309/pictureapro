@@ -23,6 +23,8 @@ class ClientForm extends Form
     public ?string $city_name = null;
     public ?string $notes = null;
     public ?int $tenant_id = null;
+    public ?bool $allow_publish_images = false;
+    public ?bool $allow_commercial_comms = false;
 
     public function rules()
     {
@@ -42,6 +44,9 @@ class ClientForm extends Form
             'city_name' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
             'tenant_id' => ['nullable', 'integer', 'exists:\App\Models\User,id'],
+            'allow_publish_images' => ['nullable'],
+            'allow_commercial_comms' => ['nullable']
+
         ];
     }
     public function store(): Client
@@ -73,6 +78,8 @@ class ClientForm extends Form
         $this->city_name = $client->city_name;
         $this->notes = $client->notes;
         $this->tenant_id = $client->tenant_id;
+        $this->allow_publish_images = $client->allow_publish_images;
+        $this->allow_commercial_comms = $client->allow_commercial_comms;
     }
 
     public function update(): Client
