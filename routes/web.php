@@ -14,6 +14,8 @@ use App\Livewire\Pages\ForgotPasswordPage;
 use App\Livewire\Pages\LoginPage;
 use App\Livewire\Pages\ResetPasswordPage;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +28,7 @@ use App\Livewire\Pages\ResetPasswordPage;
 */
 
 Route::redirect('/', '/panel');
+
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/registro', RegisterPage::class)->name('register');
@@ -63,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/clientes', \App\Livewire\Pages\Dashboard\Clients\IndexPage::class)->name('dashboard.clients.index');
         Route::get('/clientes/{id}', \App\Livewire\Pages\Dashboard\Clients\ShowPage::class)->name('dashboard.clients.show');
+        Route::get('/clients/import', \App\Livewire\Pages\Dashboard\Clients\ImportPage::class)->name('clients.import');
+
     });
 
     Route::middleware(['role:admin'])->prefix('admin')->group(function () {

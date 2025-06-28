@@ -1,5 +1,6 @@
 <div>
     <!-- HEADER -->
+     
     <x-header title="Cliente" separator progress-indicator>
         <x-slot:actions>
             <x-button

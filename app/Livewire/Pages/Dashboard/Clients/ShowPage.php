@@ -13,7 +13,7 @@ class ShowPage extends Component
 {
     use Toast;
 
-    public int $id;
+    public $id;
     public Client $client;
 
     public function mount()
