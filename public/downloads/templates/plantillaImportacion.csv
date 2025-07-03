@@ -1,0 +1,7 @@
+name;lastname;email;phone_number;direccion;nif_document;country_name;city_name;postal_code;notes
+Juan;Pérez;juan.perez@example.com;600123456;Calle Mayor, 1;12345678A;España;Madrid;28001;Cliente preferente
+María;García;maria.garcia@example.com;655987654;Avenida Libertad 15;87654321B;España;Barcelona;8001;
+Carlos;Rodríguez;carlos.rod@example.com;611222333;Plaza España 3;11223344C;España;Sevilla;41004;Necesita factura
+Ana;López;ana.lopez@example.com;644555666;Gran Vía 22;55667788D;España;Valencia;46001;
+David;Martínez;david.mtz@example.com;677888999;Calle Sol 5;99887766E;España;Zaragoza;50001;Contactar en octubre
+Laura;Fernández;laura.fernandez@example.com;699112233;Paseo Marítimo 8;33445566F;España;Málaga;29001;VIP

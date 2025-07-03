@@ -31,6 +31,14 @@ class ImportPage extends Component
         $this->fileUploaded = true;
     }
 
+    public function download()
+    {
+        // Ruta donde guardarás la plantilla (asegúrate que la carpeta existe)
+        $path = public_path('downloads/templates/plantillaImportacion.csv');
+        
+        return response()->download($path, 'plantillaImportacion.csv');
+    }
+
     public function import()
     {
         $this->validate(); // Validación final
