@@ -75,7 +75,7 @@ class IndexPage extends Component
             ->orderBy(...array_values($this->sortBy))
             ->paginate(perPage: config('app.defaults.pagination'));
 
-        $services = Service::all();
+        $services = Service::where('tenant_id', '=', Auth::id())->get();
 
         return view('livewire.pages.dashboard.clients.index-page', compact('headers', 'clients', 'services'));
     }
