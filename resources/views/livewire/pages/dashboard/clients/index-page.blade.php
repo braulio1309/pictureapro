@@ -10,8 +10,11 @@
                 class="rounded-3xl" />
 
         </x-slot:middle>
+
+
     </x-header>
-    <div class="flex items-center space-x-4">
+
+    <div class="flex items-center space-x-4 mb-6">
         <livewire:components.clients.export-button
             :filters="['search' => $search]"
             :label="'Exportar Resultados'"
@@ -24,6 +27,20 @@
             wire-navigate
             link="{{ route('clients.import') }}" />
     </div>
+
+    <x-select class='mb-3'
+        wire:model.live.debounce.750ms="selectedService"
+        placeholder="Filtrar por servicio"
+        :options="[
+        ...$services->map(fn($service) => [
+            'value' => $service->id,
+            'label' => $service->name
+        ])->toArray()
+    ]"
+        option-value="value"
+        option-label="label"
+        class="rounded-3xl w-64"
+        clearable />
     <!-- TABLE  -->
     <x-card class="bg-white shadow-xl rounded-3xl">
         <x-table

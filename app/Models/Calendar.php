@@ -58,4 +58,6 @@ class Calendar extends Model implements HasMedia
     {
         return $this->getFirstMediaUrlCustom('cover');
     }
+
+
 }

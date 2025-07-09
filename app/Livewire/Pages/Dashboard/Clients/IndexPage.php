@@ -4,7 +4,7 @@ namespace App\Livewire\Pages\Dashboard\Clients;
 
 use App\Livewire\Forms\ClientForm;
 use App\Models\Client;
-use App\Models\User;
+use App\Models\Service;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
@@ -18,6 +18,8 @@ class IndexPage extends Component
 
     public ClientForm $form;
     public string $search = '';
+    public string $selectedService = '';
+
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
 
     /**
@@ -65,9 +67,16 @@ class IndexPage extends Component
                         ->orWhere('phone_number', 'like', "%{$this->search}%");
                 });
             })
+            ->when(!empty($this->selectedService), function ($query) {
+                $query->whereHas('bookings.calendar.services', function ($q) {
+                    $q->where('service_id', (int)$this->selectedService);
+                });
+            })
             ->orderBy(...array_values($this->sortBy))
             ->paginate(perPage: config('app.defaults.pagination'));
 
-        return view('livewire.pages.dashboard.clients.index-page', compact('headers', 'clients'));
+        $services = Service::all();
+
+        return view('livewire.pages.dashboard.clients.index-page', compact('headers', 'clients', 'services'));
     }
 }
