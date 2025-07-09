@@ -241,7 +241,7 @@ class ShowPage extends Component
             }
 
             // 5. enviar notificación
-            $this->tenant->notify(new PhotographerBooked($booking));
+            //$this->tenant->notify(new PhotographerBooked($booking));
         });
 
         $this->booked = true;
