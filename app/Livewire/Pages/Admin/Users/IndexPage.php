@@ -52,7 +52,7 @@ class IndexPage extends Component
     {
         $headers = $this->getTableHeaders();
         $users = User::query()
-            ->role('photographer')
+            //->role('photographer')
             ->when(!empty($this->search), function ($query) {
                 $query->where(function ($query) {
                     $query
