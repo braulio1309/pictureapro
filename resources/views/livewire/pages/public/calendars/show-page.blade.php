@@ -194,7 +194,7 @@
                         <label class="label cursor-pointer justify-start gap-4">
                             <input
                                 type="checkbox"
-                                wire:model="form.allow_publish_images"
+                                wire:model="clientForm.allow_publish_images"
                                 class="checkbox checkbox-primary" />
                             <span class="label-text">El cliente permite publicar sus imágenes</span>
                         </label>
@@ -204,7 +204,7 @@
                         <label class="label cursor-pointer justify-start gap-4">
                             <input
                                 type="checkbox"
-                                wire:model="form.allow_commercial_comms"
+                                wire:model="clientForm.allow_commercial_comms"
                                 class="checkbox checkbox-primary" />
                             <span class="label-text">El cliente permite comunicaciones comerciales</span>
                         </label>

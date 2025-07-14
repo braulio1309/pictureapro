@@ -18,6 +18,7 @@ class IndexPage extends Component
 
     public ClientForm $form;
     public string $search = '';
+    public string $permisos = '';
     public string $selectedService = '';
 
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
@@ -55,6 +56,7 @@ class IndexPage extends Component
     #[On('clients:deleted')]
     public function render()
     {
+        
         $headers = $this->getTableHeaders();
         $clients = Client::query()
             ->where('tenant_id', Auth::id())
@@ -68,12 +70,28 @@ class IndexPage extends Component
                 });
             })
             ->when(!empty($this->selectedService), function ($query) {
-                $query->whereHas('bookings.calendar.services', function ($q) {
+                $query->whereHas('bookings.pack.service', function ($q) {
                     $q->where('service_id', (int)$this->selectedService);
+                });
+            })
+            ->when(!empty($this->permisos), function ($query) {
+                $query->where(function ($q) {
+                    if ($this->permisos == 1){
+                        $q->where('allow_publish_images', true);
+                    }else if ($this->permisos == 2) {
+                        $q->where('allow_commercial_comms', true);
+                    }else if ($this->permisos == 3){
+                        $q->where('allow_commercial_comms', true)
+                            ->where('allow_publish_images', true);
+                    }else {
+                        $q->where('allow_commercial_comms', false)
+                            ->where('allow_publish_images', false);
+                    }
                 });
             })
             ->orderBy(...array_values($this->sortBy))
             ->paginate(perPage: config('app.defaults.pagination'));
+
 
         $services = Service::where('tenant_id', '=', Auth::id())->get();
 

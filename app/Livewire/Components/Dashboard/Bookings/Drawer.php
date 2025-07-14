@@ -470,7 +470,7 @@ class Drawer extends Component
         $this->form->status = BookingStatus::CONFIRMED;
         $this->form->update();
 
-        $this->form->booking->client->notify(new ClientConfirmed($this->form->booking));
+        //$this->form->booking->client->notify(new ClientConfirmed($this->form->booking));
 
         $this->dispatch('bookings:updated');
         $this->success('Reserva confirmada correctamente', css: 'bg-primary text-white');

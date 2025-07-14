@@ -14,12 +14,49 @@
 
     </x-header>
 
-    <div class="flex items-center space-x-4 mb-6">
+    <div class="flex items-center justify-between mb-6">
+    <!-- Botones de exportación/importación -->
+    
+
+    <!-- Filtros -->
+    <div class="flex items-center space-x-4">
+        <!-- Filtro por servicio -->
+        <x-select 
+            wire:model.live.debounce.750ms="selectedService"
+            placeholder="Filtrar por servicio"
+            :options="[
+                ...$services->map(fn($service) => [
+                    'value' => $service->id,
+                    'label' => $service->name
+                ])->toArray()
+            ]"
+            option-value="value"
+            option-label="label"
+            class="rounded-3xl w-64"
+            clearable />
+
+        <!-- Filtro por permisos -->
+        <x-select
+            wire:model.live="permisos"
+            placeholder="Filtro por permisos"
+            :options="[
+                ['value' => '1', 'label' => 'El cliente permite publicar sus imagenes'],
+                ['value' => '2', 'label' => 'El cliente permite comunicaciones comerciales'],
+                ['value' => '3', 'label' => 'Ambos'],
+                ['value' => '0', 'label' => 'Ninguno']
+
+            ]"
+            option-value="value"
+            option-label="label"
+            class="rounded-3xl w-64"
+            clearable />
+    </div>
+    <div class="flex items-center space-x-4">
         <livewire:components.clients.export-button
             :filters="['search' => $search]"
             :label="'Exportar Resultados'"
             icon="file-excel"
-            btn-class="btn btn-success" />
+            btn-class="btn btn-primary" />
 
         <x-button
             label="Importar clientes"
@@ -27,20 +64,7 @@
             wire-navigate
             link="{{ route('clients.import') }}" />
     </div>
-
-    <x-select class='mb-3'
-        wire:model.live.debounce.750ms="selectedService"
-        placeholder="Filtrar por servicio"
-        :options="[
-        ...$services->map(fn($service) => [
-            'value' => $service->id,
-            'label' => $service->name
-        ])->toArray()
-    ]"
-        option-value="value"
-        option-label="label"
-        class="rounded-3xl w-64"
-        clearable />
+</div>
     <!-- TABLE  -->
     <x-card class="bg-white shadow-xl rounded-3xl">
         <x-table
