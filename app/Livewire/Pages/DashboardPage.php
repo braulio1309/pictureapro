@@ -4,20 +4,58 @@ namespace App\Livewire\Pages;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class DashboardPage extends Component
 {
     public $tenant;
-    public $timeRange = '30'; // 7, 30, 90 días
-    
+    public $timeRange = '30'; 
+    public $startDate;
+    public $endDate;
+
+    protected $listeners = ['dateRangeUpdated' => 'handleDateRangeUpdate'];
+
+
     public function mount()
     {
-        $this->tenant = Auth::user();
+        // Valores por defecto (últimos 30 días)
+        $this->startDate = now()->subDays(30)->format('Y-m-d');
+        $this->endDate = now()->format('Y-m-d');
+        $this->timeRange = $this->timeRange;
+
     }
-    
+
+    // Método para cambiar el rango de fechas con los botones (7, 30, 90 días)
     public function setTimeRange($days)
     {
-        $this->timeRange = $days;
+        $this->tenant = Auth::user();
+        $this->startDate = now()->subDays($days)->format('Y-m-d');
+        $this->endDate = now()->format('Y-m-d');
+        $this->dispatchDateRangeUpdate();
+    }
+
+    public function updated($property)
+    {
+        if (in_array($property, ['startDate', 'endDate'])) {
+            $this->timeRange = Carbon::parse($this->startDate)->diffInDays(Carbon::parse($this->endDate));
+            $this->dispatchDateRangeUpdate();// Notificar a otros componentes
+        }
+    }
+
+    protected function dispatchDateRangeUpdate()
+    {
+        $this->dispatch('dateRangeUpdated', [
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate
+        ]);
+    }
+
+    // Manejar actualización desde otros componentes
+    public function handleDateRangeUpdate($dates)
+    {
+        $this->startDate = $dates['startDate'];
+        $this->endDate = $dates['endDate'];
+        $this->timeRange = Carbon::parse($this->startDate)->diffInDays(Carbon::parse($this->endDate));
     }
     
     // Estadísticas principales

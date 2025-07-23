@@ -1,7 +1,11 @@
-name;lastname;email;phone_number;direccion;nif_document;country_name;city_name;postal_code;notes
-Juan;P�rez;juan.perez@example.com;600123456;Calle Mayor, 1;12345678A;Espa�a;Madrid;28001;Cliente preferente
-Mar�a;Garc�a;maria.garcia@example.com;655987654;Avenida Libertad 15;87654321B;Espa�a;Barcelona;8001;
-Carlos;Rodr�guez;carlos.rod@example.com;611222333;Plaza Espa�a 3;11223344C;Espa�a;Sevilla;41004;Necesita factura
-Ana;L�pez;ana.lopez@example.com;644555666;Gran V�a 22;55667788D;Espa�a;Valencia;46001;
-David;Mart�nez;david.mtz@example.com;677888999;Calle Sol 5;99887766E;Espa�a;Zaragoza;50001;Contactar en octubre
-Laura;Fern�ndez;laura.fernandez@example.com;699112233;Paseo Mar�timo 8;33445566F;Espa�a;M�laga;29001;VIP
+Nombre;Apellidos;Email;Telefono;NIF;Direccion;Codigo postal;Ciudad;provincia;Pais;Newsletter;Publicar;Notas
+Juan;Pérez García;juan.perez@example.com;612345678;12345678A;Calle Mayor 1;28001;Madrid;Madrid;España;1;1;Cliente preferente
+María;López Fernández;maria.lopez@example.com;623456789;87654321B;Avenida Libertad 15;08001;Barcelona;Barcelona;España;0;1;
+Carlos;Martínez Sánchez;carlos.martinez@example.com;634567890;13579246C;Plaza España 3;41001;Sevilla;Sevilla;España;1;0;Contactar por tarde
+Ana;Gómez Rodríguez;ana.gomez@example.com;645678901;24681357D;Calle Gran Vía 22;48001;Bilbao;Vizcaya;España;1;1;
+David;Ruiz Hernández;david.ruiz@example.com;656789012;98765432E;Paseo Marítimo 8;46001;Valencia;Valencia;España;0;0;No llamar
+Laura;Díaz Moreno;laura.diaz@example.com;667890123;86420975F;Calle Real 45;50001;Zaragoza;Zaragoza;España;1;1;
+Pablo;Serrano Jiménez;pablo.serrano@example.com;678901234;75319086G;Avenida Central 12;15001;La Coruña;La Coruña;España;0;1;
+Sofía;Blanco Castro;sofia.blanco@example.com;689012345;32198765H;Calle Nueva 7;03001;Alicante;Alicante;España;1;0;Solo email
+Javier;Vidal Muñoz;javier.vidal@example.com;690123456;15948732I;Plaza Constitución 4;29001;Málaga;Málaga;España;1;1;
+Elena;Torres Román;elena.torres@example.com;601234567;48261593J;Calle del Sol 9;36201;Vigo;Pontevedra;España;0;0;

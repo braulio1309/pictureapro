@@ -11,18 +11,31 @@ use Illuminate\Support\Facades\DB;
 
 class ChartsBooking extends Component
 {
-    public $bookingData;
+    public $bookingData = [];
+    public $startDate;
+    public $endDate;
+    
+    protected $listeners = ['dateRangeUpdated' => 'handleDateRangeChange'];
 
-    public function mount()
+    public function mount($startDate, $endDate)
     {
-        $this->bookingData = $this->prepareBookingData();
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+        $this->prepareBookingData();
     }
 
+    public function handleDateRangeChange($dates)
+    {
+        $this->startDate = $dates['startDate'];
+        $this->endDate = $dates['endDate'];
+        $this->prepareBookingData();
+        
+        // Disparar evento para actualizar el gráfico
+        $this->dispatch('booking-chart-updated', data: $this->bookingData);
+    }
 
     protected function prepareBookingData()
     {
-        $data = [];
-        $days = 30;
         $servicesData = DB::table('bookings')
             ->select(
                 'services.name as service_name',
@@ -36,13 +49,15 @@ class ChartsBooking extends Component
                     ->whereColumn('clients.id', 'bookings.client_id')
                     ->where('clients.tenant_id', Auth::id());
             })
-            ->where('bookings.created_at', '>=', now()->subDays(30))
+            ->whereBetween('bookings.created_at', [
+                Carbon::parse($this->startDate)->startOfDay(),
+                Carbon::parse($this->endDate)->endOfDay()
+            ])
             ->groupBy('services.id', 'services.name')
             ->orderByDesc('total_bookings')
             ->get();
 
-            
-        return [
+        $this->bookingData = [
             'labels' => $servicesData->pluck('service_name')->toArray(),
             'data' => $servicesData->pluck('total_bookings')->toArray(),
             'colors' => $this->generateChartColors($servicesData->count())
@@ -63,13 +78,13 @@ class ChartsBooking extends Component
             'rgb(255, 99, 255)'
         ];
 
-        // Si hay más servicios que colores base, repetimos el array
         return array_slice(
             array_merge(...array_fill(0, ceil($count / count($baseColors)), $baseColors)),
             0,
             $count
         );
     }
+
     public function render()
     {
         return view('livewire.dashboard.charts-booking');

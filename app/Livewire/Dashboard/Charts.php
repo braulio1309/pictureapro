@@ -4,70 +4,52 @@ namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
 use App\Models\Client;
-use App\Models\Booking;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class Charts extends Component
 {
-    public $clientGrowthData;
-    public $bookingData;
+    public $clientGrowthData = [];
+    public $startDate;
+    public $endDate;
+    
+    protected $listeners = ['dateRangeUpdated' => 'handleDateRangeChange'];
 
-    public function mount()
+    public function mount($startDate, $endDate)
     {
-        $this->clientGrowthData = $this->prepareClientGrowthData();
-        $this->bookingData = $this->prepareBookingData();
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+        $this->prepareChartData();
     }
 
-    protected function prepareClientGrowthData()
+    public function handleDateRangeChange($dates)
     {
-        $data = [];
-        $days = 30;
+        $this->startDate = $dates['startDate'];
+        $this->endDate = $dates['endDate'];
+        $this->prepareChartData();        
+        
+        $this->dispatch('chart-updated', data: $this->clientGrowthData);
+    }
 
-        for ($i = $days; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i);
-            $count = Client::whereDate('created_at', '<=', $date)
-                ->where('tenant_id', Auth::user()->id)
-                ->count();
+    protected function prepareChartData()
+    {
+        $start = Carbon::parse($this->startDate);
+        $end = Carbon::parse($this->endDate);
+        $days = $start->diffInDays($end);
+        
+        $step = $days > 90 ? 7 : 1;
 
-            $data[] = [
+        $this->clientGrowthData = [];
+        
+        for ($i = 0; $i <= $days; $i += $step) {
+            $date = $start->copy()->addDays($i);
+            $this->clientGrowthData[] = [
                 'Day' => $date->format('M d'),
-                'Value' => $count,
+                'Value' => Client::where('tenant_id', Auth::id())
+                    ->whereDate('created_at', '=', $date)
+                    ->count()
             ];
         }
-
-        return $data;
-    }
-
-    protected function prepareBookingData()
-    {
-        $data = [];
-        $days = 30;
-        $pending = Booking::whereHas('client', function($query) {
-                    $query->where('tenant_id', Auth::id());
-                })
-                ->where('created_at', '>=', now()->subDays(30))
-                ->with(['client', 'calendar']) // Carga las relaciones
-                ->where('status', '=', 'pending')
-                ->orderBy('start_time', 'desc')
-                ->count();
-        $confirmed = Booking::whereHas('client', function($query) {
-                    $query->where('tenant_id', Auth::id());
-                })
-                ->where('created_at', '>=', now()->subDays(30))
-                ->with(['client', 'calendar']) // Carga las relaciones
-                ->where('status', '=', 'confirmed')
-                ->orderBy('start_time', 'desc')->count();
-        $completed = Booking::whereHas('client', function($query) {
-                    $query->where('tenant_id', Auth::id());
-                })
-                ->where('created_at', '>=', now()->subDays(30))
-                ->with(['client', 'calendar']) // Carga las relaciones
-                ->where('status', '=', 'completed')
-                ->orderBy('start_time', 'desc')->count();
-         
-
-        return [$pending, $confirmed, $completed];
     }
 
     public function render()

@@ -18,7 +18,7 @@ export default {
         "./vendor/robsontenorio/mary/src/View/Components/**/*.php"
     ],
     safelist: [
-        'badge-outline', 'badge-error', 'badge-success', 'badge-accent', 'badge-primary', 'badge-secondary', 'badge-warning', 'badge-info', 'badge-neutral',
+        'badge-outline', 'badge-error', 'badge-success', 'badge-accent', 'badge-primary', 'badge-secondary', 'badge-warning', 'badge-info', 'badge-neutral', 'badge-details', 'btn-details'
     ],
     theme: {
         fontFamily: {
@@ -73,10 +73,11 @@ export default {
                     "primary": "#5c51a6",  
                     "secondary": "#9c8bd9",
                     "accent": "#f294c0",
-                    "info": "#f2b3d1",
+                    "info": "#e371a8ff",
                     "success": "#22c55e",
                     "warning": "#facc15",
                     "error": "#dc2626",
+                    "details": "#c66996",
                 },
             },
         ],

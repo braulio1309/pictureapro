@@ -44,3 +44,13 @@
         @apply bg-primary
     }
 }
+
+.btn-details {
+    background-color: var(--btn-details, #c66996) !important;
+    color: var(--btn-details-content, white) !important;
+}
+
+/* Efecto hover */
+.btn-details:hover {
+    background-color: var(--btn-details-hover, #b45b86) !important;
+}

@@ -56,11 +56,11 @@
             :filters="['search' => $search]"
             :label="'Exportar Resultados'"
             icon="file-excel"
-            btn-class="btn btn-primary" />
+            btn-class="btn btn-details" />
 
         <x-button
             label="Importar clientes"
-            class="btn btn-secondary"
+            class="btn btn-accent text-white"
             wire-navigate
             link="{{ route('clients.import') }}" />
     </div>

@@ -1,5 +1,5 @@
 <div>
-    <button
+    <x-button
         wire:click="export"
         wire:loading.attr="disabled"
         wire:target="export"
