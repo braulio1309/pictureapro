@@ -76,6 +76,13 @@
                 link="{{ route('dashboard.calendars.index') }}"
                 route="dashboard.calendars.*"
             />
+
+            <x-menu-item
+                title="Galerías"
+                icon="s-photo"
+                link="{{ route('dashboard.galleries.index') }}"
+                route="dashboard.galleries.*"
+            />
         </x-menu>
     </x-slot:sidebar>
 </div>

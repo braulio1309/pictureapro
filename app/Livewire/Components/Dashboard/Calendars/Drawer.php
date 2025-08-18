@@ -13,6 +13,10 @@ use Livewire\Attributes\Computed;
 use App\Livewire\Forms\CalendarForm;
 use App\Models\CalendarAvailability;
 use App\Models\CalendarQuestion;
+use App\Services\GoogleCalendarService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class Drawer extends Component
 {
@@ -196,7 +200,6 @@ class Drawer extends Component
             'single_capacity.required' => 'La capacidad es obligatoria.',
             'single_capacity.min' => 'La capacidad debe ser al menos 1.',
         ]);
-
         $availability = CalendarAvailability::create([
             'calendar_id' => $this->form->calendar->id,
             'date' => $this->single_date,
@@ -205,6 +208,34 @@ class Drawer extends Component
             'duration' => $this->duration,
             'capacity' => $this->single_capacity,
         ]);
+        if (Auth::user()->google_refresh_token) {
+           
+                $service = new GoogleCalendarService(Auth::user());
+                
+                $eventData = [
+                    'summary' => 'Cita: ' . $this->form->calendar->name,
+                    'description' => $this->form->calendar->description ?? 'Cita creada desde el sistema',
+                    'start' => [
+                        'dateTime' => Carbon::parse($this->single_date . ' ' . $this->single_time)->toIso8601String(),
+                        'timeZone' => config('app.timezone'),
+                    ],
+                    'end' => [
+                        'dateTime' => Carbon::parse($this->single_date . ' ' . $this->single_time)
+                            ->addMinutes($this->duration)
+                            ->toIso8601String(),
+                        'timeZone' => config('app.timezone'),
+                    ],
+                    'colorId' => $this->form->color ?? null,
+                ];
+
+                $result = $service->createEvent($eventData);
+                
+                if (!$result['success']) {
+                    Log::error('Google Calendar sync failed: ' . ($result['error'] ?? 'Unknown error'));
+                }
+            
+        }
+
 
         $this->dispatch('calendars:availability-updated');
         $this->open = false;
@@ -273,6 +304,7 @@ class Drawer extends Component
                 $start = new Carbon($day->format('Y-m-d') . ' ' . $timeslot['start_time']);
                 $end = new Carbon($day->format('Y-m-d') . ' ' . $timeslot['end_time']);
                 $interval_minutes = $data['duration'];
+                
 
                 while ($start->lt($end)) {
                     $slots[] = [
@@ -306,6 +338,32 @@ class Drawer extends Component
                 'duration' => $day['duration'],
                 'capacity' => $day['capacity'],
             ]);
+            if (Auth::user()->google_refresh_token) {
+                try {
+                    $service = new GoogleCalendarService(Auth::user());
+                    
+                    $eventData = [
+                        'summary' => 'Cita: ' . $this->form->calendar->name,
+                        'description' => $this->form->calendar->description ?? 'Cita creada desde el sistema',
+                        'start' => [
+                            'dateTime' => Carbon::parse($day['date'] . ' ' . $day['start_time'])->toIso8601String(),
+                            'timeZone' => config('app.timezone'),
+                        ],
+                        'end' => [
+                            'dateTime' => Carbon::parse($day['date'] . ' ' . $day['end_time'])->toIso8601String(),
+                            'timeZone' => config('app.timezone'),
+                        ],
+                    ];
+
+                    $service->createEvent($eventData);
+                } catch (\Exception $e) {
+                    dd($e);
+                    Log::error('Batch Google Calendar sync error: ' . $e->getMessage());
+                }
+            }
+        
+
+            
         }
 
         $this->dispatch('calendars:availability-updated');
@@ -420,6 +478,28 @@ class Drawer extends Component
         }
 
         $this->questions = $this->getCalendarQuestions();
+    }
+
+    public function connectGoogleCalendar()
+    {
+        try {
+            return redirect()->route('google.connect');
+        } catch (\Exception $e) {
+            $this->error('Error al conectar con Google: ' . $e->getMessage());
+        }
+    }
+
+    public function disconnectGoogleCalendar()
+    {
+        try {
+            $service = new GoogleCalendarService(Auth::user());
+            $service->disconnect();
+            
+            $this->success('Cuenta de Google desconectada');
+            $this->dispatch('google-calendar-disconnected');
+        } catch (\Exception $e) {
+            $this->error('Error al desconectar: ' . $e->getMessage());
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ use App\Livewire\Welcome;
 use App\Livewire\Pages\RegisterPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GoogleCalendarController;
 use App\Http\Controllers\WebhooksController;
 use App\Livewire\Pages\Dashboard\Users\AccountPage;
 use App\Livewire\Pages\Dashboard\Users\ImagesPage;
@@ -60,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/servicios', \App\Livewire\Pages\Dashboard\Services\IndexPage::class)->name('dashboard.services.index');
         Route::get('/materiales', \App\Livewire\Pages\Dashboard\Materials\IndexPage::class)->name('dashboard.materials.index');
         Route::get('/productos', \App\Livewire\Pages\Dashboard\Products\IndexPage::class)->name('dashboard.products.index');
+        Route::get('/galerias', \App\Livewire\Pages\Dashboard\Galleries\IndexPage::class)->name('dashboard.galleries.index');
 
         Route::get('/calendarios', \App\Livewire\Pages\Dashboard\Calendars\IndexPage::class)->name('dashboard.calendars.index');
         Route::get('/calendarios/{id}', \App\Livewire\Pages\Dashboard\Calendars\ShowPage::class)->name('dashboard.calendars.show');
@@ -74,5 +76,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/usuarios', \App\Livewire\Pages\Admin\Users\IndexPage::class)->name('admin.users.index');
         Route::get('/usuarios/{id}', \App\Livewire\Pages\Admin\Users\ShowPage::class)->name('admin.users.show');
     });
+});
+
+Route::middleware('auth')->group(function() {
+    Route::get('/google/connect', [GoogleCalendarController::class, 'connect'])->name('google.connect');
+    Route::get('/google/callback', [GoogleCalendarController::class, 'callback'])->name('google.callback');
+    Route::get('/google/disconnect', [GoogleCalendarController::class, 'disconnect'])->name('google.disconnect');
 });
 

@@ -13,6 +13,7 @@ class CalendarAvailabilityController extends Controller
 {
     public function index(CalendarAvailabilityRequest $request, int $id)
     {
+        dd('llgeamosss');
         $data = $request->validated();
         $filters = $data['filters'];
 

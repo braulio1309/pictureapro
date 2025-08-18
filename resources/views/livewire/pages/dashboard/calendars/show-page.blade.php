@@ -31,6 +31,13 @@
                 icon="o-cog-6-tooth"
                 wire:click="openDrawer"
             />
+              @if(auth()->user()->google_refresh_token === null)
+                <x-button
+                    label="Sincronizar con google calendar"
+                    class="btn-primary rounded-3xl"
+                    icon="o-calendar"
+                    onclick="window.location='{{ route('google.connect') }}'" />
+                @endif
         </x-slot:actions>
     </x-header>
 
@@ -187,8 +194,8 @@
     </div>
 
     <livewire:components.dashboard.calendars.drawer />
-    <livewire:components.dashboard.calendars.availability-drawer />
     <livewire:components.dashboard.bookings.drawer />
+    <livewire:components.dashboard.calendars.availability-drawer />
 </div>
 
 @script

@@ -43,7 +43,7 @@
                 ['value' => '1', 'label' => 'El cliente permite publicar sus imagenes'],
                 ['value' => '2', 'label' => 'El cliente permite comunicaciones comerciales'],
                 ['value' => '3', 'label' => 'Ambos'],
-                ['value' => '0', 'label' => 'Ninguno']
+                ['value' => '4', 'label' => 'Ninguno']
 
             ]"
             option-value="value"

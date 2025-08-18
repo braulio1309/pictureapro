@@ -1,8 +1,7 @@
 <div>
-    <x-header title="Bienvenido 🎉" separator progress-indicator />
+    <x-header title="Panel de Control" separator progress-indicator />
 
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Panel de Control</h1>
 
         <div class="flex gap-2 mb-6">
             <button wire:click="setTimeRange('7')" class="btn btn-accent btn-ouline text-white rounded-3xl">7 días</button>
@@ -14,7 +13,7 @@
                     label="Desde"
                     icon="o-calendar"
                     inline
-                    class="rounded-3xl"
+                    class="rounded-3xl h-11"
                     wire:model.live="startDate"
                     type="date" />
             </div>
@@ -23,7 +22,7 @@
                     label="Hasta"
                     icon="o-calendar"
                     inline
-                    class="rounded-3xl"
+                    class="rounded-3xl h-11"
                     wire:model.live="endDate"
                     type="date" />
             </div>

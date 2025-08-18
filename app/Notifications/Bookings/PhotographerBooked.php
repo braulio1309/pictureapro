@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PhotographerBooked extends Notification implements ShouldQueue
+class PhotographerBooked extends Notification
 {
     use Queueable;
 

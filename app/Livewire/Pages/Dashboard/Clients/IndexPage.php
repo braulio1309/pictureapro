@@ -83,7 +83,7 @@ class IndexPage extends Component
                     }else if ($this->permisos == 3){
                         $q->where('allow_commercial_comms', true)
                             ->where('allow_publish_images', true);
-                    }else {
+                    }else if ($this->permisos == 4){
                         $q->where('allow_commercial_comms', false)
                             ->where('allow_publish_images', false);
                     }

@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\DB;
 use App\Livewire\Forms\BookingForm;
 use App\Models\CalendarAvailability;
 use App\Notifications\Bookings\PhotographerBooked;
+use App\Notifications\Bookings\ClientConfirmed;
+
 
 #[Layout('components.layouts.public')]
 class ShowPage extends Component
@@ -241,7 +243,8 @@ class ShowPage extends Component
             }
 
             // 5. enviar notificación
-            //$this->tenant->notify(new PhotographerBooked($booking));
+            $this->tenant->notify(new PhotographerBooked($booking));
+            $client->notify(new ClientConfirmed($booking));
         });
 
         $this->booked = true;
