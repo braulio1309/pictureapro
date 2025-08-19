@@ -19,6 +19,8 @@ class GalleryPhoto extends Model implements HasMedia
     protected $fillable = [
         'gallery_id',
         'path',
+        'is_cover',
+        'has_watermark'
     ];
 
 
