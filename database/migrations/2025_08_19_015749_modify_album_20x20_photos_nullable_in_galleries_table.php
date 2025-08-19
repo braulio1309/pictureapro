@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('gallery_photos', function (Blueprint $table) {
-            //$table->string('filename')->nullable()->change();
+        Schema::table('galleries', function (Blueprint $table) {
+            $table->string('album_20x20_photos')->nullable()->change();
         });
     }
 
@@ -21,8 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('gallery_photos', function (Blueprint $table) {
-            //
+        Schema::table('galleries', function (Blueprint $table) {
         });
     }
 };

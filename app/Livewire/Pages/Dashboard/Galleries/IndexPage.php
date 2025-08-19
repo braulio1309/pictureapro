@@ -18,7 +18,7 @@ class IndexPage extends Component
     #[On('active-switcher:change')]
     public function changeStatus(bool $status)
     {
-       $this->is_active = $status;
+        $this->is_active = $status;
     }
 
     #[On('galleries-type-switcher:change')]
@@ -49,9 +49,13 @@ class IndexPage extends Component
             ->when(!empty($this->search), function ($query) {
                 $query->where('internal_title', 'like', "%{$this->search}%");
             })
-            ->with(['media'])
+            ->with(['photos' => function ($q) {
+                $q->where('is_cover', 1);
+            }])
             ->latest()
             ->get();
+
+
 
         return view('livewire.pages.dashboard.galleries.index-page', compact('galleries'));
     }

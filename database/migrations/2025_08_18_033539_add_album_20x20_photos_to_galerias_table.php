@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('galleries', function (Blueprint $table) {
-            $table->integer('album_20x20_photos')->default(0)->after('show_complete_session_button');
-            $table->boolean('includes_canvas_60x40')->after('album_20x20_photos');
+            //$table->integer('album_20x20_photos')->default(0);
+            //$table->boolean('includes_canvas_60x40')->after('album_20x20_photos');
 
 
         });

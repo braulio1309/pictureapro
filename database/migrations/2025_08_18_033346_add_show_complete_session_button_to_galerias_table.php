@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('galleries', function (Blueprint $table) {
-            $table->boolean('show_complete_session_button')->default(false)->after('is_active');
+            //$table->boolean('show_complete_session_button')->default(false)->after('is_active');
         });
     }
 

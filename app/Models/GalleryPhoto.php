@@ -26,4 +26,9 @@ class GalleryPhoto extends Model implements HasMedia
     {
         return $this->belongsTo(Gallery::class);
     }
+
+     public function getCoverAttribute()
+    {
+        return $this->getFirstMediaUrlCustom('path');
+    }
 }
