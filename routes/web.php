@@ -14,6 +14,9 @@ use App\Livewire\Pages\EmailVerificationPage;
 use App\Livewire\Pages\ForgotPasswordPage;
 use App\Livewire\Pages\LoginPage;
 use App\Livewire\Pages\ResetPasswordPage;
+use App\Http\Controllers\PortalController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\CheckoutController;
 
 
 
@@ -30,6 +33,14 @@ use App\Livewire\Pages\ResetPasswordPage;
 
 Route::redirect('/', '/panel');
 
+Route::post('/subscribe', [CheckoutController::class, 'subscribe'])->name('subscribe');
+Route::get('/subscribe', \App\Livewire\Pages\Dashboard\Subscription\IndexPage::class)->name('subscribes');
+
+
+
+// Webhook de Stripe (NO requiere auth)
+Route::post('/stripe/webhook', [WebhooksController::class, 'handle'])
+    ->name('stripe.webhook');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/registro', RegisterPage::class)->name('register');
@@ -43,14 +54,14 @@ Route::post('/webhooks/stripe/{code}', [WebhooksController::class, 'stripe'])->n
 
 Route::get('/calendario/{slug}', \App\Livewire\Pages\Public\Calendars\ShowPage::class)->name('public.calendars.show');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'subscribed'])->group(function () {
     Route::get('/salir', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/verificar-correo', EmailVerificationPage::class)->name('verification.notice');
     Route::get('/verificar-correo/{id}/{hash}', [AuthController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
     Route::get('/verificar', [AuthController::class, 'verifyEmail']);
 
-    Route::middleware(['verified'])->prefix('panel')->group(function () {
+    Route::middleware(['verified', 'subscribed'])->prefix('panel')->group(function () {
         Route::get('/', DashboardPage::class)->name('dashboard');
 
         Route::get('/mi-cuenta', AccountPage::class)->name('account.details');
@@ -83,4 +94,5 @@ Route::middleware('auth')->group(function() {
     Route::get('/google/callback', [GoogleCalendarController::class, 'callback'])->name('google.callback');
     Route::get('/google/disconnect', [GoogleCalendarController::class, 'disconnect'])->name('google.disconnect');
 });
+
 

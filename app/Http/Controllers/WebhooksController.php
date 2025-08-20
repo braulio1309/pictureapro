@@ -9,6 +9,11 @@ use App\Enums\BookingStatus;
 use App\Enums\PaymentStatus;
 use App\Notifications\Bookings\ClientConfirmed;
 use App\Notifications\Bookings\PhotographerConfirmed;
+use Stripe\Webhook;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+
+
 
 class WebhooksController extends Controller
 {
@@ -58,5 +63,49 @@ class WebhooksController extends Controller
 
         $booking->calendar->tenant->notify(new PhotographerConfirmed($booking));
         $booking->client->notify(new ClientConfirmed($booking));
+    }
+
+    public function handle(Request $request)
+    {
+        $endpoint_secret = config('services.stripe.webhook_secret');
+
+        $payload = $request->getContent();
+        $sig_header = $request->server('HTTP_STRIPE_SIGNATURE');
+
+        try {
+            $event = Webhook::constructEvent(
+                $payload,
+                $sig_header,
+                $endpoint_secret
+            );
+        } catch (\UnexpectedValueException $e) {
+            return response()->json(['error' => 'Invalid payload'], 400);
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }
+
+        // Manejar eventos según el tipo
+        switch ($event->type) {
+            case 'customer.subscription.created':
+                Log::info('Nueva suscripción creada', $event->data->object);
+                break;
+
+            case 'customer.subscription.updated':
+                Log::info('Suscripción actualizada', $event->data->object);
+                break;
+
+            case 'invoice.payment_succeeded':
+                Log::info('Pago exitoso', $event->data->object);
+                break;
+
+            case 'invoice.payment_failed':
+                Log::warning('Pago fallido', $event->data->object);
+                break;
+
+            default:
+                Log::info('Evento recibido: ' . $event->type);
+        }
+
+        return response()->json(['status' => 'success'], 200);
     }
 }

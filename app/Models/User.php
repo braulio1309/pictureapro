@@ -13,16 +13,17 @@ use Lab404\Impersonate\Models\Impersonate;
 use LucasDotVin\Soulbscription\Models\Concerns\HasSubscriptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
     use HasFactory;
     use HasRoles;
-    use HasSubscriptions;
     use InteractsWithMediaCustom;
     use Impersonate;
     use SoftDeletes;
     use Notifiable;
+    use Billable;
 
     /**
      * The attributes that are mass assignable.
